@@ -1,0 +1,58 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #222536;
+  --border: #2e3347;
+  --accent: #4f8ef7;
+  --accent-dim: rgba(79, 142, 247, 0.12);
+  --green: #3ecf8e;
+  --yellow: #f0c040;
+  --red: #f06060;
+  --text: #e8eaf0;
+  --muted: #7b80a0;
+  --radius: 10px;
+  --font: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+h1 { font-size: 1.5rem; font-weight: 700; }
+h2 { font-size: 1.1rem; font-weight: 600; }
+h3 { font-size: 0.95rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.65rem 1.4rem;
+  transition: opacity 0.15s, background 0.15s;
+}
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+input, select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  padding: 0.55rem 0.8rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s;
+}
+input:focus, select:focus { border-color: var(--accent); }
+input::placeholder { color: var(--muted); }
+select option { background: var(--surface2); }
