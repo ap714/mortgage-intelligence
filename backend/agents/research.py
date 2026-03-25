@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import os
 
 import anthropic
 
@@ -44,6 +45,11 @@ async def research_node(state: GraphState) -> dict:
 
     Writes `rate_context` into the graph state.
     """
+    if os.getenv("MOCK_CLAUDE", "").lower() == "true":
+        from backend.agents.mock import MOCK_RATE_CONTEXT
+        logger.info("research_node: using mock Claude response")
+        return {"rate_context": MOCK_RATE_CONTEXT}
+
     try:
         boc_rate, goc_5yr, corra, history = await asyncio.gather(
             fetch_boc_overnight_rate(),

@@ -2,6 +2,7 @@
 
 import json
 import logging
+import os
 from datetime import date
 
 import anthropic
@@ -66,6 +67,20 @@ async def recommendation_node(state: GraphState) -> dict:
     rate_ctx = state.get("rate_context")
     analyses = state.get("strategy_analyses")
     borrower = state["borrower_input"]
+
+    if os.getenv("MOCK_CLAUDE", "").lower() == "true":
+        from backend.agents.mock import MOCK_RECOMMENDATION_PARSED
+        logger.info("recommendation_node: using mock Claude response")
+        parsed = MOCK_RECOMMENDATION_PARSED
+        recommendation = RecommendationOutput(
+            recommended_strategy=RenewalStrategy(parsed["recommended_strategy"]),
+            rationale=parsed["rationale"],
+            strategies=analyses or [],
+            confidence_score=float(parsed["confidence_score"]),
+            rate_environment_summary=rate_ctx["rate_environment_summary"] if rate_ctx else "",
+            generated_at=date.today(),
+        )
+        return {"recommendation": recommendation}
 
     if rate_ctx is None or analyses is None:
         msg = "recommendation_node: missing rate_context or strategy_analyses"

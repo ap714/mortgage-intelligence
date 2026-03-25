@@ -2,6 +2,7 @@
 
 import json
 import logging
+import os
 
 import anthropic
 
@@ -53,6 +54,13 @@ async def evaluator_node(state: GraphState) -> dict:
     """
     recommendation = state.get("recommendation")
     rate_ctx = state.get("rate_context")
+
+    if os.getenv("MOCK_CLAUDE", "").lower() == "true":
+        from backend.agents.mock import MOCK_EVALUATION
+        logger.info("evaluator_node: using mock Claude response")
+        if recommendation:
+            recommendation.confidence_score = MOCK_EVALUATION["confidence_score"]
+        return {"evaluation": MOCK_EVALUATION}
 
     if recommendation is None:
         msg = "evaluator_node: no recommendation to evaluate"
